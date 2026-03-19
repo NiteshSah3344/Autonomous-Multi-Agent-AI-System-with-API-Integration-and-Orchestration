@@ -63,7 +63,7 @@ Delay Likely: No
 
 ---
 
-### 📌 Notes
+###  Notes
 
 * Output includes **launch details, weather conditions, and news context**
 * Final decision is clearly summarized as **Delay Likely: No**
