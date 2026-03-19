@@ -1,159 +1,173 @@
-What does this part of the project consist?
-The  answer is:
-	Flow of the code
-agent logic, 
-APIs used in the program,
-Setup 
+#  Multi-Agent AI System for Real-Time Data Analysis
 
+A modular **Multi-Agent AI System** where multiple specialized agents collaborate to process user queries, fetch real-time data from APIs, and generate structured, intelligent responses.
 
-1.Flow of the code:
+This project demonstrates how **autonomous agents can coordinate and depend on each other** to solve complex tasks—similar to modern AI systems used in production.
 
-User Goal Input
-      ↓
-  PlannerAgent
-  (Creates agent execution plan based on keywords in goal)
-      ↓
-Execution Loop:
+---
+
+##  Key Features
+
+*  Multi-agent architecture with task specialization
+*  Agent orchestration (agents depend on each other's outputs)
+*  Real-time API integration (weather, finance, news, etc.)
+*  Modular and extensible design
+*  Structured output generation
+*  Scalable system design for adding new agents
+
+---
+
+##  System Architecture
+
+```text
+User Query
     ↓
-  LaunchAgent
-  (Fetch SpaceX launch & location)
+Planner Agent (decides workflow)
     ↓
-  WeatherAgent
-  (Fetch weather info for launch location)
+-----------------------------------
+| Research Agent                  |
+| Weather Agent (API)            |
+| Finance Agent (API)            |
+-----------------------------------
     ↓
-  NewsAgent
-  (Fetch news headlines about the launch)
+Aggregator / Response Generator
     ↓
-  AnalyzerAgent
-  (Check if weather/news indicate possible delay)
-    ↓
-  SummaryAgent
-  (Generate formatted summary for output)
-    ↓
-  EvaluatorAgent
-  (Checks if goal is fulfilled → summary generated)
+Final Output
+```
+
+---
+
+##  How It Works
+
+1. User provides a query
+2. **Planner Agent** breaks it into subtasks
+3. Specialized agents:
+
+   * Fetch data (APIs)
+   * Process information
+4. Results are combined into a final response
+
+---
+
+##  Project Structure
+
+```bash
+multi-agent-ai-system/
+│
+├── agents/
+│   ├── planner_agent.py
+│   ├── weather_agent.py
+│   ├── finance_agent.py
+│   ├── news_agent.py
+│
+├── orchestrator/
+│   └── main.py
+│
+├── utils/
+│   └── api_clients.py
+│
+├── config/
+│   └── settings.py
+│
+├── .env.example
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+---
+
+##  Installation
+
+```bash
+git clone https://github.com/NiteshSah3344/Multi-Agent-AI-System.git
+cd Multi-Agent-AI-System
+pip install -r requirements.txt
+```
+
+---
+
+##  Environment Variables
+
+Create a `.env` file using:
+
+```env
+OPENWEATHER_API_KEY=your_api_key
+NEWS_API_KEY=your_api_key
+GEMINI_API_KEY=your_api_key
+```
+
+---
+
+##  Usage
+
+Run the main orchestrator:
+
+```bash
+python main.py
+```
+
+---
+
+## 🧪 Example
+
+### Input
+
+```text
+"Analyze today's weather and stock market trends"
+```
+
+### Output
+
+```text
+Weather: Mumbai - 32°C, Humid  
+Stock Market: NIFTY up 1.2%  
+Insight: Positive market conditions with stable weather.
+```
+
+---
+
+##  Agents Overview
+
+| Agent          | Responsibility                 |
+| -------------- | ------------------------------ |
+| Planner Agent  | Breaks query into subtasks     |
+| Weather Agent  | Fetches weather data           |
+| Finance Agent  | Fetches stock/crypto data      |
+| Research Agent | Gathers contextual information |
+| Aggregator     | Combines outputs               |
+
+---
+
+##  Why This Project Matters
+
+This project demonstrates:
+
+* Multi-agent orchestration
+* Real-world API integration
+* AI system design principles
+* Modular backend architecture
+
+It reflects how modern AI systems are built using **collaborative agents instead of monolithic models**.
+
+---
+
+##  Future Improvements
+
+* Add memory (vector database)
+* Parallel agent execution
+* Streamlit / Web UI
+* Integration with frameworks like LangChain or CrewAI
+* Advanced reasoning with LLM chaining
+
+---
 
 
-2. Agent logic:
 
-        a.  PlannerAgent
-        •	Input: Natural language goal string from the user.
-        •	Logic:
-        	Scans the goal for keywords like "launch", "weather", "delay", "summary".
-        	Based on these keywords, creates an execution plan (ordered list of agent names).
-        •	Output: A list of agent names (plan), e.g.:
-        ["LaunchAgent", "WeatherAgent", "NewsAgent", "AnalyzerAgent", "SummaryAgent"]
+---
 
-        b. LaunchAgent
-        •	Input: Shared data dictionary from Coordinator.
-        •	Logic:
-        	Calls SpaceX API to fetch the next upcoming launch.
-           
-           
-           Extracts:
-        	launch_name (e.g., "Starlink 32")
-        	launchpad_id (ID of launchpad)
-        	Uses the launchpad ID to fetch the launchpad location (e.g., "Cape Canaveral").
-        
-        •	Output: Updates data dictionary with:
+##  Author
 
-        {
-            "launch_name": "Starlink 32",
-            "location": "Cape Canaveral"
-        }
+**Nitesh Sah**
 
-
-
-        c. WeatherAgent
-        •	Input: location from data dictionary.
-        •	Logic:
-        	Uses OpenWeatherMap API to fetch weather info for the location.
-        	Extracts:
-        	Main weather condition (e.g., "Rain", "Clear")
-        	Wind speed
-        
-        •	Error Handling:
-        	If API call fails, sets weather to "Unknown".
-        •	Output: Updates data dictionary:
-        {
-            "weather_main": "Rain",
-            "wind_speed": 6.2
-        }
-
-
-
-        d. NewsAgent
-
-        •	Input: launch_name from data dictionary.
-        •	Logic:
-        	Uses NewsAPI to fetch the latest 3 news articles related to the launch.
-        	Extracts article titles.
-        
-        •	Output: Updates data dictionary:
-        {
-            "news_headlines": ["SpaceX delays launch", "New window announced", ...]
-        }
-
-
-
-
-        e. AnalyzerAgent
-        •	Input: weather_main and news_headlines from data.
-        •	Logic:
-        	Checks if weather_main is bad ("Rain", "Snow", "Thunderstorm").
-        	Checks if any news headline contains the word "delay".
-        	If either condition is true, marks delay as likely.
-        •	Output: Updates data dictionary:
-        {
-            "delay_likely": True
-        }
-
-        f.  SummaryAgent
-        •	Input: All previous data: launch_name, location, weather, news, delay.
-        •	Logic:
-        	Formats the information into a human-readable summary.
-        
-        •	Output: Adds a summary string to data:
-        {
-            "summary": "Launch: Starlink 32\nLocation: Cape Canaveral\nWeather: Rain (Wind: 6.2 m/s)..."
-        }
-
-        g.  EvaluatorAgent
-        •	Input: Final data dictionary.
-        •	Logic:
-        	Simply checks if the "summary" field exists in the data.
-        
-        •	Output: Returns:
-        	True → if goal is fulfilled (summary exists)
-        	False → if not yet completed
-
-
-Example Summary Output:
-Launch: Starlink 32
-Location: Cape Canaveral
-Weather: Rain (Wind: 6.2 m/s)
-News:
-- SpaceX delays launch
-- New window announced
-- Weather concerns mount
-Delay Likely: Yes
-
-
-APIs Used in the development of the program:
-News API for extracting news about the launch
-Spacex API to get next launch and location; no key needed to utilize this api
-Weather API for analyzing weather of the launch location 
-
-
-Overall Setup: Purpose of the Program
-Built a multi-agent system in Python that collaborates to fulfill user goals like:
-“Find the next SpaceX launch, check weather at that location, then summarize if it may be delayed.”
-
-
-The System:
-•	Receives natural language goals
-•	Automatically plans the necessary steps
-•	Uses external APIs (SpaceX, OpenWeatherMap, NewsAPI)
-•	Agents pass enriched data between each other
-•	Produces a final human-readable summary
-
+---
