@@ -1,69 +1,145 @@
-##  Evaluation of Agent Performance
+#  Multi-Agent AI System for Real-Time Data Analysis
+
+A modular **Multi-Agent AI System** where multiple specialized agents collaborate to process user queries, fetch real-time data from APIs, and generate structured, intelligent responses.
+
+This project demonstrates how **autonomous agents can coordinate and depend on each other** to solve complex tasks—similar to modern AI systems used in production.
 
 ---
 
-###  Goal
+##  Key Features
 
-> **"Find the next SpaceX launch, check weather at that location, then summarize if it may be delayed."**
+*  Multi-agent architecture with task specialization
+*  Agent orchestration (agents depend on each other's outputs)
+*  Real-time API integration (weather, finance, news, etc.)
+*  Modular and extensible design
+*  Structured output generation
+*  Scalable system design for adding new agents
 
 ---
 
-###  Agent Trajectory
+##  System Architecture
 
 ```text
-PlannerAgent ➝ LaunchAgent ➝ WeatherAgent ➝ NewsAgent ➝ AnalyzerAgent ➝ SummaryAgent ➝ EvaluatorAgent
+User Query
+    ↓
+Planner Agent (decides workflow)
+    ↓
+-----------------------------------
+| Research Agent                  |
+| Weather Agent (API)            |
+| Finance Agent (API)            |
+-----------------------------------
+    ↓
+Aggregator / Response Generator
+    ↓
+Final Output
 ```
 
 ---
 
-###  Intermediate Contributions
+##  How It Works
 
-* **LaunchAgent**
-  ➝ Added `launch_name = "Falcon 9 Starlink"`
-  ➝ Added `location = "California"`
+1. User provides a query
+2. **Planner Agent** breaks it into subtasks
+3. Specialized agents:
 
-* **WeatherAgent**
-  ➝ Added `weather_main = "Rain"`
-  ➝ Added `wind_speed = 5.1`
-
-* **NewsAgent**
-  ➝ Extracted top 3 headlines related to launch
-
-* **AnalyzerAgent**
-  ➝ Flagged `delay_likely = True` due to weather
-
-* **SummaryAgent**
-  ➝ Composed final summary
-
-* **EvaluatorAgent**
-  ➝ Confirmed summary existence
+   * Fetch data (APIs)
+   * Process information
+4. Results are combined into a final response
 
 ---
 
-###  Goal Satisfaction
-
-✔ **Goal satisfied successfully**
-
 ---
 
-##  Program Output
+##  Installation
 
-```text
-Launch: USSF-44
-Location: Cape Canaveral
-Weather: Clouds (Wind: 4.88 m/s)
-
-News:
-- Defenders Girma, Fox Prove To Be True National (Team) Treasures
-- Potencjał piłki nożnej w USA został koncertowo zmarnowany. "Patologiczny system"
-- Dest latest USMNT absentee in Gold Cup roster
-
-Delay Likely: No
+```bash
+git clone https://github.com/NiteshSah3344/Multi-Agent-AI-System.git
+cd Multi-Agent-AI-System
+pip install -r requirements.txt
 ```
 
 ---
 
-###  Notes
+##  Environment Variables
 
-* Output includes **launch details, weather conditions, and news context**
-* Final decision is clearly summarized as **Delay Likely: No**
+Create a `.env` file using:
+
+```env
+OPENWEATHER_API_KEY=your_api_key
+NEWS_API_KEY=your_api_key
+GEMINI_API_KEY=your_api_key
+```
+
+---
+
+##  Usage
+
+Run the main orchestrator:
+
+```bash
+python main.py
+```
+
+---
+
+##  Example
+
+### Input
+
+```text
+"Analyze today's weather and stock market trends"
+```
+
+### Output
+
+```text
+Weather: Mumbai - 32°C, Humid  
+Stock Market: NIFTY up 1.2%  
+Insight: Positive market conditions with stable weather.
+```
+
+---
+
+##  Agents Overview
+
+| Agent          | Responsibility                 |
+| -------------- | ------------------------------ |
+| Planner Agent  | Breaks query into subtasks     |
+| Weather Agent  | Fetches weather data           |
+| Finance Agent  | Fetches stock/crypto data      |
+| Research Agent | Gathers contextual information |
+| Aggregator     | Combines outputs               |
+
+---
+
+##  Why This Project Matters
+
+This project demonstrates:
+
+* Multi-agent orchestration
+* Real-world API integration
+* AI system design principles
+* Modular backend architecture
+
+It reflects how modern AI systems are built using **collaborative agents instead of monolithic models**.
+
+---
+
+##  Future Improvements
+
+* Add memory (vector database)
+* Parallel agent execution
+* Streamlit / Web UI
+* Integration with frameworks like LangChain or CrewAI
+* Advanced reasoning with LLM chaining
+
+---
+
+
+
+##  Author
+
+**Nitesh Sah**
+
+---
